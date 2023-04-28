@@ -338,7 +338,7 @@ Please find accuracy graphs from the three different datasets that we evaluated 
 
 ![birds test](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/birds_test.png?raw=true)
 
-#### Conclusion of Ablation Study
+#### Summary of Ablation Study
 
 Based on the results of the ablation study, it is clear that modifying the architecture of the EfficientNetV2 model can have a significant impact on its performance on different datasets. 
 
