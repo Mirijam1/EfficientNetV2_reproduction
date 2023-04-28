@@ -54,7 +54,7 @@ By comparing the effects of these hyperparameters on the model's accuracy and tr
 
 As expected with only 100 training examples for each class our models have overfit, though due to the nature of our changes we simplify the model so at times we can actually see some gains.
 
-### Results
+#### Results hyperparameter check
 
 Below are the graphed results for the imageNet 128x128 dataset, for others please see the jupyter notebook in our code.
 
@@ -70,27 +70,27 @@ Figure: Testing Accuracies of ImageNet 128x128.
 
 Figure: Train times of ImageNet 128x128.
 
-### Depth multiplier of MBConv layers (0.1):
+##### Depth multiplier of MBConv layers (0.1):
 
-#### Findings
+**Findings**
 
 Our findings reveal that using a depth multiplier of 0.1 in MBConv layers led to interesting results. For the 32x32 models, the training accuracy reached its peak faster, and the test accuracy showed a slight but insignificant improvement. On the other hand, for the 128x128 models, the training accuracy also peaked faster, while the test accuracy improved by about 10%.
 
-#### Analysis
+**Analysis**
 
 The quicker convergence in training accuracy for both resolutions could be attributed to the reduced model complexity. With fewer filters in the MBConv layers, the model had fewer parameters to learn, leading to faster training times. This reduction in complexity, however, might have limited the model's ability to learn intricate features, which could explain the minimal improvement in test accuracy for the 32x32 models.
 
 The more significant improvement in test accuracy for the 128x128 models could be due to the larger input size, which allowed the model to better capture and learn complex features despite having a reduced number of filters. This demonstrates that the EfficientNetV2 model's performance is sensitive to both its architecture and the input resolution, highlighting the importance of balancing model complexity with the input size for achieving optimal results.
 
-### Reducing the number of layers in all convolutional layers by half:
+##### Reducing the number of layers in all convolutional layers by half:
 
-#### Findings
+**Findings**
 
 Our experiment with reducing the number of layers in all convolutional layers by half yielded some unexpected results. For the ImageNet 32x32 dataset, the test accuracy was worse after the change compared to the original model. However, for the 128x128 dataset, the test accuracy improved by about 5% on average.
 
 When not using the ReduceLROnPlateau scheduler, the differences between the models seemed insignificant. This was contrary to our expectations, as we assumed that reducing the number of layers would have a similar effect as the depth multiplier of MBConv layers since both modifications reduce model complexity.
 
-#### Analysis
+**Analysis**
 
 The contrasting results between the 32x32 and 128x128 datasets could be due to the differences in input resolution. With smaller input sizes (32x32), the reduction in layers might have limited the model's ability to capture and learn complex features, leading to a decrease in test accuracy. On the other hand, the 128x128 dataset allowed the model to better learn intricate features despite having fewer layers, which contributed to the improved test accuracy.
 
@@ -98,13 +98,13 @@ The absence of significant differences between the models when not using the sch
 
 This points to the idea that reducing the number of layers in all convolutional layers by half had varying effects on the EfficientNetV2 model's performance depending on the input size and the presence of a learning rate scheduler. Further investigation is necessary to understand the underlying reasons for these results and to determine the optimal configuration for different applications
 
-### Increasing dropout rate (0.2 to 0.6):
+##### Increasing dropout rate (0.2 to 0.6):
 
-#### Findings
+**Findings**
 
 When we increased the dropout rate from 0.2 to 0.6, we observed that without the scheduler, there was no significant change in model performance. In the case of the bird dataset, the test accuracy dropped by about 3%. For the ImageNet dataset, we noticed a slight increase in test accuracy of about 2% for the 32x32 resolution and a more substantial increase of around 10% for the 128x128 resolution, which seems to be a recurring pattern for these two input sizes.
 
-#### Analysis
+**Analysis**
 
 The absence of significant changes in model performance without the scheduler might indicate that the learning rate plays a crucial role in the effectiveness of dropout as a regularization technique. The drop in test accuracy for the bird dataset could be attributed to the increased dropout rate leading to a loss of essential features during training. This suggests that a higher dropout rate may not always be beneficial for smaller datasets, as it might hinder the model's ability to learn critical patterns.
 
@@ -112,7 +112,7 @@ On the other hand, the improvements in test accuracy for the ImageNet dataset, e
 
 It seems that for larger and more diverse datasets, such as the ImageNet 128x128 dataset, increasing the dropout rate (e.g., from 0.2 to 0.6) has been shown to improve test accuracy, as it helps prevent overfitting and enhances the model's generalization ability.
 
-### Increasing stochastic depth probability (0.5):
+##### Increasing stochastic depth probability (0.5):
 
 The lack of significant changes in model performance without the scheduler suggests that the learning rate plays a crucial role in determining the effectiveness of stochastic depth as a regularization technique. The substantial decrease in test accuracy for the ImageNet 32x32 dataset could be due to the higher stochastic depth probability resulting in the loss of important features during training. This might indicate that a higher stochastic depth probability is not always beneficial, especially for smaller input sizes, as it may prevent the model from learning critical patterns.
 
@@ -120,7 +120,7 @@ Conversely, the increase in test accuracy for the 128x128 dataset might be attri
 
 Increasing the stochastic depth probability seems to have had varying effects on the EfficientNetV2 model's performance depending on the input size.
 
-### Summary
+#### Summary
 
 In our experiments with various hyperparameters on the EfficientNetV2 model, we observed the following trends:
 
@@ -135,8 +135,6 @@ In our experiments with various hyperparameters on the EfficientNetV2 model, we 
 From our exploration of various hyperparameters and their effects on the EfficientNetV2 model, we have gained valuable insights into its behavior and performance. Our findings highlight the model's sensitivity to input resolution, learning rate, and architectural changes. The experiments demonstrated that reducing complexity, either through depth reduction or decreasing the number of layers in convolution blocks, can lead to faster training times while maintaining reasonable accuracy levels, particularly for higher resolution inputs.
 
 The results also emphasized the importance of regularization techniques, such as dropout and stochastic depth, in preventing overfitting and improving generalization. However, the effectiveness of these techniques is influenced by factors such as dataset size, input resolution, and learning rate scheduling. In conclusion, EfficientNetV2 is a versatile and powerful model whose performance can be fine-tuned through careful consideration and adjustment of hyperparameters, input size, and training strategies to achieve optimal results in various applications.
-
-### Hyperparams Check
 
 ### Ablation Study
 
