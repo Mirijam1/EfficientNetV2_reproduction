@@ -110,5 +110,11 @@ Please find accuracy graphs from the three different datasets that we evaluated 
 ![ImageNetTE test](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/imagenet_test.png?raw=true)
 
 ##### MNIST dataset
+![MNIST train](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/mnist_train.png?raw=true)
+
+![MNIST test](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/mnist_test.png?raw=true)
 
 ##### 25-indian-bird-species-with-226k-images dataset
+![Birds train](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/birds_train.png?raw=true)
+
+![birds test](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/birds_test.png?raw=true)
