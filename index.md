@@ -4,7 +4,7 @@
 
 ## Authors
 The authors of this blog post are:
-* Nishant Aklecha (n.aklecha.tudelft.nl) [5693357]
+* Nishant Aklecha (n.aklecha@student.tudelft.nl) [5693357]
 * Mirijam Zhang (s.x.zhang@student.tudelft.nl) [4660129]
 * Jahson O'Dwyer Wha Binda
 
