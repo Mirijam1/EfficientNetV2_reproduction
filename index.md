@@ -89,7 +89,8 @@ The transform function for EfficientNet_V2_S can be called as follows: `Efficien
 
 The EfficientNetV2-S model with pre-trained weights is compared to the EfficientNet_b0 and Resnet50 models. All models use their pre-trained weights. 
 
-```def test_efficientnet_b0_model():
+```
+def test_efficientnet_b0_model():
     """
     Load the pre-trained EfficientNetB0 model.
     """
@@ -113,6 +114,7 @@ def test_resnet50_model():
     model.eval()
     return model
 ```
+
 #### Results
 * Efficientnet_v2_s Test Accuracy: 84.06%, Test Loss: 0.7213
 * Efficientnet_b0 Test Accuracy: 78.99%, Test Loss: 0.8590
