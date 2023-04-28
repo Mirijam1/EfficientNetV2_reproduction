@@ -2,6 +2,10 @@
 
 ## Introduction
 
+Reproducibility is a fundamental principle in the research community that allows researchers to independently validate and verify research findings. In computer science research and particularly in the deep learning community, where the complexity and size of models can be enormous, reproducibility is critical to ensuring the reliability and trustworthiness of research results. Reproducibility allows researchers to build on previous work, compare results across different studies, and ensure that their findings are robust.
+
+In this post we have reproduced the results of EfficientNetV2 [1], tested the model on new data, performed a hyperparameter check and done an ablation studies.
+
 ## Authors
 
 The authors of this blog post are:
@@ -14,25 +18,105 @@ The authors of this blog post are:
 
 ## Reproduction
 
-The EfficientNetV2 model is available on PyTorch [1]. There are three EfficientNetV2 architectures, EfficientNetV2-S, EfficientNetV2-M, and EfficientNetV2-L. For this reproduction project, EfficientNetV2-S is used as it is a smaller model that uses less parameters and will thus be faster.
+The EfficientNetV2 model is available on PyTorch [2]. There are three EfficientNetV2 architectures, EfficientNetV2-S, EfficientNetV2-M, and EfficientNetV2-L. For this reproduction project, EfficientNetV2-S is used in this reproduction as it is a smaller model that uses less parameters and will thus be faster.
 
 PyTorch includes pretrained weights with the model. However, by default, no pre-trained weights are used.
 
 ### New data
 
-The new dataset that we chose to train and test is the '25 Indian bird species with 226k images' [2]. The images are resized to 32x32 and 128x128 and trained and tested on both sizes.
+The new dataset that we chose to train and test is the '25 Indian bird species with 226k images' [3]. 
+
+For each class, 100 images are kept for training and testing. This is due to the RAM limitions in Colab.
+The images are imported and resized to 32x32 and 128x128. The model is trained and tested once on the images from 32x32 and once on the images from 128x128.
+
+The model trains for 350 epochs, each epochs trains in batches of 128. At least 150 epochs are run, after 150 epochs, if the best accuracy does not improve for 50 epochs, the training is stopped.
+The model is tested in batches of 128.
+
+#### Results
+**32x32**
+![birds_32x32_accuracy](images/efficient_v2_s_new_data_and_reproduction/birds_efficientnet_v2_s_train_32x32_100perclass.png)
+The best test accuracy achieved is 6%.
+
+**Analysis**
+
+The accuracies appear to be very low. The train results are slightly higher than the test results. However, it can be concluded that the model is not able to learn anything from the data. This can be due to the small images, or because too little images were used per class. Birds can be quite difficult to classify, so it is possible that the model required more images per class to be able to train accordingly. However, due to the limitations of Colab, this was not possible.
+
+**128x128**
+![birds_128x128_accuracy](images/efficient_v2_s_new_data_and_reproduction/birds_efficientnet_v2_s_train_128x128_100perclass.png)
+The best test accuracy achieved is 13.80%.
+
+**Analysis**
+
+With data of size 128x128, the model is able to improve its accuracy. The accuracy stabilizes after 50 epochs and stays around 20% for training and 12.5% for testing. The train accuracies are higher than the test accuracies. However, the model still performs poorly. Due to the stopping condition the model stopped training after 200 epochs. 
 
 ### Reproduced
+To reproduce the results of the paper, the model has to be trained and tested on a subset of the ImageNet dataset [4]. However, as the dataset is too large, this reproduction will work with ImageNetTE [5], which contains a subset of 10 classes from ImageNet.
 
 #### Training and testing with no weights
 
+For each class, 100 images are kept for training and testing. This is due to the RAM limitions in Colab.
+As with the birds dataset, the images are imported and resized to 32x32 and 128x128. The model is trained and tested once on the images from 32x32 and once on the images from 128x128.
+
+#### Results
+
+**32x32**
+![imagenette_32x32_accuracy](images/efficient_v2_s_new_data_and_reproduction/imagenette_32x32.png)
+The best test accuracy achieved is 10.20%.
+
+**Analysis**
+
+The model stabilizes after around 5 epochs. The train accuracy achieves an average of 14% and the test accuracy achieves an average of 9%. The train results are slightly higher than the test results. However, it can be concluded that the model has low accuracy. This can be due to the small images, or because the model needed more images per class for traiing. However, due to the limitations of Colab, this was not possible.
+
+**128x128**
+![imagenette_128x128_accuracy](images/efficient_v2_s_new_data_and_reproduction/imagenette_128x128.png)
+The best test accuracy achieved is 41.62%.
+
+**Analysis**
+
+With data of size 128x128, the model is able to improve its accuracy. The accuracy stabilizes after 50 epochs and stays around 20% for training and 12.5% for testing. The train accuracies are higher than the test accuracies. However, the model still performs poorly. Due to the stopping condition the model stopped training after 200 epochs. 
+
 #### Testing the model with pre-trained weights
 
-For reproduction of the results, the pretrained weights, EfficientNet_V2_S_Weights.DEFAULT, [3] were used. These weights improve upon the results of the original paper by using a modified version of TorchVision’s new training recipe.
+For reproduction of the results, the pretrained weights, EfficientNet_V2_S_Weights.DEFAULT, [6] were used. These weights improve upon the results of the original paper by using a modified version of TorchVision’s new training recipe.
 
 Before using the pre-trained models, the images must be preprocessed (resize with right resolution/interpolation, apply inference transforms, rescale the values etc). A preprocessing transforms function is included in the model weight.
 
-The transform function for EfficientNet_V2_S can be called as follows: `EfficientNet_V2_S_Weights.DEFAULT.transforms()`. The function accepts: PIL.Image, batched (B, C, H, W) and single (C, H, W) image torch.Tensor objects. It performs the following operations: The images are resized to resize_size=[384] using interpolation=InterpolationMode.BILINEAR, followed by a central crop of crop_size=[384]. Finally the values are first rescaled to [0.0, 1.0] and then normalized using mean=[0.485, 0.456, 0.406] and std=[0.229, 0.224, 0.225]. [2]
+The transform function for EfficientNet_V2_S can be called as follows: `EfficientNet_V2_S_Weights.DEFAULT.transforms()`. The function accepts: PIL.Image, batched (B, C, H, W) and single (C, H, W) image torch.Tensor objects. It performs the following operations: The images are resized to resize_size=[384] using interpolation=InterpolationMode.BILINEAR, followed by a central crop of crop_size=[384]. Finally the values are first rescaled to [0.0, 1.0] and then normalized using mean=[0.485, 0.456, 0.406] and std=[0.229, 0.224, 0.225]. [6]
+
+The EfficientNetV2-S model with pre-trained weights is compared to the EfficientNet_b0 and Resnet50 models. All models use their pre-trained weights. 
+
+```def test_efficientnet_b0_model():
+    """
+    Load the pre-trained EfficientNetB0 model.
+    """
+    model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.DEFAULT, num_classes=num_classes)
+    model.eval()
+    return model
+
+def test_efficientnet_v2_s_model():
+    """
+    Load the pre-trained EfficientNet-V2-S model.
+    """
+    model = models.efficientnet_v2_s(weights=models.EfficientNet_V2_S_Weights.DEFAULT, num_classes=num_classes)
+    model.eval()
+    return model
+
+def test_resnet50_model():
+    """
+    Load the pre-trained ResNet50 model.
+    """
+    model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2, num_classes=num_classes)
+    model.eval()
+    return model
+```
+#### Results
+* Efficientnet_v2_s Test Accuracy: 84.06%, Test Loss: 0.7213
+* Efficientnet_b0 Test Accuracy: 78.99%, Test Loss: 0.8590
+* Resnet50 Test Accuracy: 81.16%, Test Loss: 3.4024
+
+**Analysis**
+
+As the paper states, it appears EfficientNetV2 is able to gain the highest accuracy.
 
 ### Hyperparameter check
 
@@ -252,8 +336,15 @@ Please find accuracy graphs from the three different datasets that we evaluated 
 
 ## References
 
-1: https://pytorch.org/vision/main/models/efficientnetv2.html
+1: https://arxiv.org/pdf/2104.00298v3.pdf
 
-2: https://www.kaggle.com/datasets/arjunbasandrai/25-indian-bird-species-with-226k-images
+2: https://pytorch.org/vision/main/models/efficientnetv2.html
 
-3: https://pytorch.org/vision/main/models/generated/torchvision.models.efficientnet_v2_s.html#torchvision.models.EfficientNet_V2_S_Weights
+3: https://www.kaggle.com/datasets/arjunbasandrai/25-indian-bird-species-with-226k-images
+
+4: https://image-net.org/download.php
+
+5: https://github.com/fastai/imagenette
+
+6:
+https://pytorch.org/vision/main/models/generated/torchvision.models.efficientnet_v2_s.html#torchvision.models.EfficientNet_V2_S_Weights
