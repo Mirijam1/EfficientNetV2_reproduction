@@ -88,7 +88,7 @@ As for the expected outcome, we anticipated that the simplified model would have
 
 Our findings from this ablation study would offer valuable insights into the trade-offs between model complexity, computational cost, training time, and model accuracy in the design of efficient deep learning models for computer vision tasks.
 
-#### Dropped two configs from the model layers
+#### Dropped one layer configs for both MBConv and FusedMBConv layers
 For this ablation study, we decided to modify the default layer configuration of the small EfficientNetV2 model. Specifically, we reduced the number of layers from the default configuration shown below.
 
 We expected that the modified model would have a lower computational cost and faster training and inference times compared to the default model, while maintaining a comparable level of accuracy. Our findings from this ablation study would help in guiding the design of efficient deep learning models for computer vision tasks, and provide insights into the trade-offs between model complexity, computational cost, and model accuracy.
@@ -118,3 +118,13 @@ Please find accuracy graphs from the three different datasets that we evaluated 
 ![Birds train](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/birds_train.png?raw=true)
 
 ![birds test](https://github.com/Mirijam1/EfficientNetV2_reproduction/blob/main/images/birds_test.png?raw=true)
+
+#### Conclusion of Ablation Study
+
+Results of the ablation study can vary based on the specific modifications made to the model. In this case, the results show that certain modifications can lead to improvements in accuracy, while others may result in reduced performance.
+
+For example, in the MNIST dataset, all variations except "only using MBConv layers" reached 99% accuracy, which indicates that the modifications did not significantly impact the model's ability to classify the images correctly. However, the "only using MBConv layers" variation had lower train accuracy and converged slower, which suggests that the model's capacity was not enough to learn the features of the dataset.
+
+On the other hand, in the birds dataset, the train accuracies swiftly increased for all variations, but the test accuracy was highest for "only using FusedMBConv layers" and "dropping one of each layer worked" variations. This may indicate that the modifications helped the model learn the features of the dataset more efficiently. However, the test accuracies seemed to stagnate and not increase after epoch 10 (unlike the train accuracies which were 99%), which could suggest overfitting.
+
+In general, modifications that reduce the computational cost of the model while maintaining or improving accuracy are desirable. However, if the modifications are too drastic or reduce the model's expressive power, they may result in reduced performance. It is also important to monitor for overfitting, as the model may perform well on the training data but not generalize well to unseen data. We observed overfitting during our training process as seen in the graphs, this was due to small dataset subsets we used as we were limited in our resouces and time.
